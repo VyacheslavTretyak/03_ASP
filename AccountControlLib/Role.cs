@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace AccountControlLib
 {
-	class Role
+	public class Role
 	{
 		public int ID { get; set; }
+		public Role()
+		{
+			
+		}
 		public Role(string name)
 		{
 			Name = name;

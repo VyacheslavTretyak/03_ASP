@@ -3,12 +3,12 @@
 @using AccountControl2.Controllers;
 @using AccountControlLib;
 
-@model List<User>
+@model List<Role>
 
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>Account List</title>
+	<title>Role List</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous" />
 	<link href="~/Content/style.css" rel="stylesheet" />
 </head>
@@ -17,12 +17,11 @@
 	{
 		<div class="container">
 			<div class="row">
-				<h1>Users List</h1>
+				<h1>Role List</h1>
 				<div class="form col-lg-12">
 					<table>
-						<tr>
-							<th></th>						
-							@foreach (PropertyInfo propInfo in typeof(User).GetProperties().Where(p => p.GetCustomAttribute<DontShowOnForm>() == null))
+						<tr>													
+							@foreach (PropertyInfo propInfo in typeof(Role).GetProperties().Where(p => p.GetCustomAttribute<DontShowOnForm>() == null))
 							{
 								<th>@propInfo.Name</th>								
 							}
@@ -32,26 +31,22 @@
 							for (int i = 0; i < Model.Count; i++)
 							{
 						<tr>
-							<td>
-								@Html.CheckBoxFor(model => model[i].Selected)
-								@Html.HiddenFor(model => model[i].ID)
-							</td>
-							@foreach (PropertyInfo propInfo in typeof(User).GetProperties().Where(p => p.GetCustomAttribute<DontShowOnForm>() == null))
-							{								
+							@foreach (PropertyInfo propInfo in typeof(Role).GetProperties().Where(p => p.GetCustomAttribute<DontShowOnForm>() == null))
+							{
 								<td>@propInfo.GetValue(Model[i])</td>
-								}
-								<td><a href="@Url.Action("Edit", new { id=Model[i].ID})" ForeColor="#aa9933"> Edit</a></td>
+							}
+							<td><a href="@Url.Action("Edit", new { id=Model[i].ID})" ForeColor="#aa9933"> Edit</a></td>
+							<td><a href="@Url.Action("Delete", new { id=Model[i].ID})" ForeColor="#ee5588"> Delete</a></td>
 						</tr>
 							}
 						}
-					</table>
-					<input name="delete" class="btn" type="submit" value="Delete" />
+					</table>					
 				</div>
 			</div>
 			<div class="row">
 				<div class="footer col-lg-12">
-					<input value="Add User" class="btn" type="button" onclick="location.href='@Url.Action("create")'" />
-					<a href="@Url.Action("List", "Role")" ForeColor="#66ffff">Role List</a>
+					<input value="Add Role" class="btn" type="button" onclick="location.href='@Url.Action("create")'" />
+					<a href="@Url.Action("List", "AccountList")" ForeColor="#66ffff">Users List</a>
 				</div>
 			</div>
 		</div>

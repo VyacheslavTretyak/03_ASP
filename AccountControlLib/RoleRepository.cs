@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AccountControlLib
 {
-	class RoleRepository : IRepository<Role>
+	public class RoleRepository : IRepository<Role>
 	{
 		private static RoleRepository instance = null;
 		public static RoleRepository Instance => instance ?? (instance = new RoleRepository());
@@ -14,7 +15,11 @@ namespace AccountControlLib
 		private List<Role> list = new List<Role>();
 		private RoleRepository() { }
 
-		public void Create(Role item) => list?.Add(item);
+		public void Create(Role item)
+		{
+			item.ID = (list.LastOrDefault()?.ID ?? 0) + 1;
+			list?.Add(item);
+		}
 
 
 		public bool Delete(int id) => list?.Remove(Get(id)) ?? false;
@@ -23,9 +28,13 @@ namespace AccountControlLib
 
 		public IEnumerable<Role> GetAll() => list;
 
-		public void Update(Role item)
+		public void Update(Role editing)
 		{
-
+			Role role = Get(editing.ID);
+			foreach (PropertyInfo propInfo in role.GetType().GetProperties().Where(p => p.Name != "ID"))
+			{				
+				propInfo.SetValue(role, propInfo.GetValue(editing));
+			}
 		}
 
 		public bool IsInit { get; set; } = false;

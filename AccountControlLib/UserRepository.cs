@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AccountControlLib
 {
-	class UserRepository : IRepository<User>
+	public class UserRepository : IRepository<User>
 	{
 		private static UserRepository instance = null;
 		public static UserRepository Instance => instance ?? (instance = new UserRepository());
@@ -26,9 +27,14 @@ namespace AccountControlLib
 
 		public IEnumerable<User> GetAll() => list;
 
-		public void Update(User item)
+		public void Update(User editing)
 		{
-			throw new NotImplementedException();
+			User user = Get(editing.ID);
+			foreach(PropertyInfo propInfo in user.GetType().GetProperties().Where(p => p.Name != "ID"))
+			{
+				//PropertyInfo editingProp = editing.GetType().GetProperty(propInfo.Name);
+				propInfo.SetValue(user, propInfo.GetValue(editing));
+			}
 		}
 
 		public bool IsInit { get; set; } = false;
